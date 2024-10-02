@@ -1,0 +1,13 @@
+[package]
+name = "axum-simd-json"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-trait = "0.1.83"
+axum = { version = "0.7.6", features = ["json"] }
+axum-core = "0.4.4"
+bytes = "1.7.2"
+http = "1.1.0"
+mime = "0.3.17"
+simd-json-derive = "0.14.0"
