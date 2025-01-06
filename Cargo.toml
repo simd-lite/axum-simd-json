@@ -4,10 +4,12 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-async-trait = "0.1.83"
-axum = { version = "0.7.6", features = ["json"] }
-axum-core = "0.4.4"
-bytes = "1.7.2"
-http = "1.1.0"
-mime = "0.3.17"
-simd-json-derive = "0.15.0"
+axum = { version = "0.8", features = ["json"] }
+axum-core = "0.5"
+bytes = "1.9"
+http = "1.2"
+mime = "0.3"
+simd-json-derive = "0.15"
+
+[dev-dependencies]
+simd-json = "0.14"

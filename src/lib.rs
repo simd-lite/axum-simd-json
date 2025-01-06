@@ -1,4 +1,3 @@
-use async_trait::async_trait;
 use axum::extract::Request;
 use axum::extract::{rejection::*, FromRequest};
 use axum::response::{IntoResponse, Response};
@@ -31,11 +30,11 @@ use simd_json_derive::{Deserialize, Serialize};
 ///
 /// ```rust,no_run
 /// use axum::{
-///     extract,
 ///     routing::post,
 ///     Router,
 /// };
-/// use serde::Deserialize;
+/// use axum_simd_json::Json;
+/// use simd_json_derive::Deserialize;
 ///
 /// #[derive(Deserialize)]
 /// struct CreateUser {
@@ -43,7 +42,7 @@ use simd_json_derive::{Deserialize, Serialize};
 ///     password: String,
 /// }
 ///
-/// async fn create_user(extract::Json(payload): extract::Json<CreateUser>) {
+/// async fn create_user(Json(payload): Json<CreateUser>) {
 ///     // payload is a `CreateUser`
 /// }
 ///
@@ -51,7 +50,7 @@ use simd_json_derive::{Deserialize, Serialize};
 /// # let _: Router = app;
 /// ```
 ///
-/// When used as a response, it can serialize any type that implements [`serde::Serialize`] to
+/// When used as a response, it can serialize any type that implements [`simd_json_derive::Serialize`] to
 /// `JSON`, and will automatically set `Content-Type: application/json` header.
 ///
 /// # Response example
@@ -61,28 +60,27 @@ use simd_json_derive::{Deserialize, Serialize};
 ///     extract::Path,
 ///     routing::get,
 ///     Router,
-///     Json,
 /// };
-/// use serde::Serialize;
-/// use uuid::Uuid;
+/// use axum_simd_json::Json;
+/// use simd_json_derive::Serialize;
 ///
 /// #[derive(Serialize)]
 /// struct User {
-///     id: Uuid,
+///     id: String,
 ///     username: String,
 /// }
 ///
-/// async fn get_user(Path(user_id) : Path<Uuid>) -> Json<User> {
+/// async fn get_user(Path(user_id) : Path<String>) -> Json<User> {
 ///     let user = find_user(user_id).await;
 ///     Json(user)
 /// }
 ///
-/// async fn find_user(user_id: Uuid) -> User {
+/// async fn find_user(user_id: String) -> User {
 ///     // ...
 ///     # unimplemented!()
 /// }
 ///
-/// let app = Router::new().route("/users/:id", get(get_user));
+/// let app = Router::new().route("/users/{id}", get(get_user));
 /// # let _: Router = app;
 /// ```
 #[derive(Debug, Clone, Copy, Default)]
@@ -90,7 +88,6 @@ use simd_json_derive::{Deserialize, Serialize};
 #[must_use]
 pub struct Json<T>(pub T);
 
-#[async_trait]
 impl<T, S> FromRequest<S> for Json<T>
 where
     T: for<'a> Deserialize<'a>,
